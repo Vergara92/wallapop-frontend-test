@@ -1,5 +1,5 @@
 import Item from '@/domain/models/Item'
-import exampleItemList from '@/api/__tests__/__mocks__/exampleItemList'
+import exampleItemList from '@/api/__mocks__/exampleItemList'
 
 describe('Item Model', () => {
   it('must have the provided title', () => {
