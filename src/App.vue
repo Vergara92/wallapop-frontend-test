@@ -1,18 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <item-list
+      v-if="itemList"
+      :item-list="itemList"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { mapActions, mapState } from 'vuex'
+import ItemList from '@/components/ItemList.vue'
 
 export default Vue.extend({
   name: 'App',
+
   components: {
-    HelloWorld
+    ItemList
+  },
+
+  computed: {
+    ...mapState(['itemList'])
+  },
+
+  methods: {
+    ...mapActions(['fetchItemList'])
+  },
+
+  created () {
+    this.fetchItemList()
   }
 })
 </script>
