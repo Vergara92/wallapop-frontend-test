@@ -34,12 +34,22 @@ export default Vue.extend({
 </script>
 
 <style>
+:root {
+  --text-color: #2c3e50;
+  --grey-color: #f7f7f7;
+  --border-radius-size: 8px;
+}
+
+html {
+    background-color: var(--grey-color);
+}
+
 #app {
+  margin-top: 60px;
+  text-align: center;
+  color: var(--text-color);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

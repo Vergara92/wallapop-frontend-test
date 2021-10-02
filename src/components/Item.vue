@@ -1,31 +1,36 @@
 <template>
-  <section class="item-list--container">
-    <ul class="item-list">
-      <Item
-        v-for="(item, index) in itemList"
-        :item="item"
-        :key="index"
-      />
-    </ul>
-  </section>
+  <li
+    class="item--container"
+  >
+    <div
+      :style="{ backgroundImage: `url(${item.image})` }"
+      class="item--image"
+      :aria-label="`Image of ${item.title}`"
+      role="img"
+    />
+    <div class="item--text">
+      <p class="item--title">{{ item.title }}</p>
+      <p class="item--description">{{ item.description | truncate }}</p>
+    </div>
+  </li>
 </template>
 
 <script lang="ts">
 import item from '@/domain/models/item.interface'
-import Item from '@/components/Item.vue'
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'ItemList',
-
-  components: {
-    Item
-  },
+  name: 'Item',
 
   props: {
-    itemList: {
+    item: {
       required: true,
-      type: Array as () => item[]
+      type: Object as () => item
+    }
+  },
+  filters: {
+    truncate: function (text: string):string | null {
+      return text.length > 90 ? text.slice(0, 90) + '...' : text
     }
   }
 })

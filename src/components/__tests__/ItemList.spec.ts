@@ -1,4 +1,5 @@
 import ItemList from '@/components/ItemList.vue'
+import ItemComponent from '@/components/Item.vue'
 import exampleItemList from '@/api/__mocks__/exampleItemList'
 import { shallowMount, Wrapper } from '@vue/test-utils'
 
@@ -9,9 +10,15 @@ const wrapper: Wrapper<ItemList> = shallowMount<ItemList>(ItemList, {
 })
 
 describe('ItemList Component', () => {
-  it('Has li elements for each item passed by prop', () => {
+  it('Renders item elements for each item passed by prop', () => {
     const itemsQuantity = exampleItemList.length
 
-    expect(wrapper.findAll('li').length).toBe(itemsQuantity)
+    expect(wrapper.findAll(ItemComponent).length).toBe(itemsQuantity)
+  })
+  it('Set Item prop in Items components', () => {
+    const firstItemObject = exampleItemList[0]
+    const firstItemComponentProp = wrapper.find(ItemComponent).props()
+
+    expect(firstItemComponentProp.item).toBe(firstItemObject)
   })
 })
