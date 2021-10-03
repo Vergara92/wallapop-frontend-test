@@ -37,6 +37,7 @@ export default Vue.extend({
 :root {
   --text-color: #2c3e50;
   --grey-color: #f7f7f7;
+  --main-color: #13C1AC;
   --border-radius-size: 8px;
 }
 
@@ -46,7 +47,6 @@ html {
 
 #app {
   margin-top: 60px;
-  text-align: center;
   color: var(--text-color);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

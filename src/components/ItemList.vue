@@ -38,41 +38,10 @@ export default Vue.extend({
   list-style-type: none;
   padding: 0;
   margin: 0 -5px;
-}
 
-.item--container {
-  flex: 0 0 calc(50% - 10px);
-  margin: 15px 5px;
-  background-color: white;
-  border-radius: var(--border-radius-size);
-  transition: box-shadow .6s ease;
-
-  &:hover {
-    box-shadow: 0 8px 16px 0 color-mod(#000 alpha(20%));
+  @media (min-width: 1020px) {
+    max-width: 1400px;
+    margin: 0 auto;
   }
-}
-
-.item--image {
-  height: 150px;
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--border-radius-size) var(--border-radius-size) 0 0;
-}
-
-.item--text {
-  padding: 0 10px 10px;
-}
-
-.item--title {
-  text-align: left;
-}
-
-.item--description {
-  font-size: 12px;
-  text-align: left;
-}
-
-img {
-  max-width: 100%;
 }
 </style>

@@ -6,6 +6,7 @@ class Item implements itemInterface {
   price: string
   email: string
   image: string
+  isFavourite?: boolean
 
   constructor (data: itemInterface) {
     this.title = data.title
@@ -13,6 +14,7 @@ class Item implements itemInterface {
     this.price = data.price
     this.email = data.email
     this.image = data.image
+    this.isFavourite = false
   }
 }
 
