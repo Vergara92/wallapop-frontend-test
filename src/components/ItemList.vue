@@ -5,6 +5,7 @@
         v-for="(item, index) in itemList"
         :item="item"
         :key="index"
+        @switch-favourite="changeFavouriteStatus"
       />
     </ul>
   </section>
@@ -14,6 +15,7 @@
 import item from '@/domain/models/item.interface'
 import Item from '@/components/Item.vue'
 import Vue from 'vue'
+import { mapActions } from 'vuex'
 
 export default Vue.extend({
   name: 'ItemList',
@@ -26,6 +28,14 @@ export default Vue.extend({
     itemList: {
       required: true,
       type: Array as () => item[]
+    }
+  },
+
+  methods: {
+    ...mapActions(['triggerFavouriteChange']),
+
+    changeFavouriteStatus (itemId: number) {
+      this.triggerFavouriteChange(itemId)
     }
   }
 })

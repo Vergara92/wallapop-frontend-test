@@ -11,21 +11,31 @@ export class State {
 }
 
 export const mutations = <MutationTree<State>>{
-  setItemList (state, itemList: Item[]) {
+  SET_ITEM_LIST (state, itemList: Item[]) {
     if (itemList.length === 0) {
       state.itemList = null
 
       return
     }
     state.itemList = itemList
+  },
+  SWITCH_FAVOURITE_STATUS (state, itemId: number) {
+    if (state.itemList === null) return
+    const currentStatus = state.itemList[itemId].isFavourite
+
+    state.itemList[itemId].isFavourite = !currentStatus
   }
+
 }
 
 export const actions = <ActionTree<State, State>>{
   async fetchItemList ({ commit }) {
     const itemList = await itemService.get()
 
-    commit('setItemList', itemList)
+    commit('SET_ITEM_LIST', itemList)
+  },
+  triggerFavouriteChange ({ commit }, itemId: number) {
+    commit('SWITCH_FAVOURITE_STATUS', itemId)
   }
 }
 

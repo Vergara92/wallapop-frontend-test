@@ -6,7 +6,7 @@ describe('Item Model', () => {
     const exampleItem = exampleItemList[0]
     const expectedTitle = exampleItem.title
 
-    const modeledItem = new Item(exampleItem)
+    const modeledItem = new Item(exampleItem, 1)
 
     expect(modeledItem.title).toBe(expectedTitle)
   })
@@ -15,7 +15,7 @@ describe('Item Model', () => {
     const exampleItem = exampleItemList[0]
     const expectedDescription = exampleItem.description
 
-    const modeledItem = new Item(exampleItem)
+    const modeledItem = new Item(exampleItem, 1)
 
     expect(modeledItem.description).toBe(expectedDescription)
   })
@@ -24,7 +24,7 @@ describe('Item Model', () => {
     const exampleItem = exampleItemList[0]
     const expectedPrice = exampleItem.price
 
-    const modeledItem = new Item(exampleItem)
+    const modeledItem = new Item(exampleItem, 1)
 
     expect(modeledItem.price).toBe(expectedPrice)
   })
@@ -33,7 +33,7 @@ describe('Item Model', () => {
     const exampleItem = exampleItemList[0]
     const expectedEmail = exampleItem.email
 
-    const modeledItem = new Item(exampleItem)
+    const modeledItem = new Item(exampleItem, 1)
 
     expect(modeledItem.email).toBe(expectedEmail)
   })
@@ -42,7 +42,7 @@ describe('Item Model', () => {
     const exampleItem = exampleItemList[0]
     const expectedImage = exampleItem.image
 
-    const modeledItem = new Item(exampleItem)
+    const modeledItem = new Item(exampleItem, 1)
 
     expect(modeledItem.image).toBe(expectedImage)
   })

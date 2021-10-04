@@ -19,4 +19,12 @@ describe('Item Service', () => {
 
     expect(itemList[0]).toBeInstanceOf(Item)
   })
+
+  it('sholuld inject array position as ID', async () => {
+    mockedgetItems.mockImplementation(() => Promise.resolve(exampleGetItems))
+
+    const itemList = await itemService.get()
+
+    expect(itemList[4].id).toBe(4)
+  })
 })

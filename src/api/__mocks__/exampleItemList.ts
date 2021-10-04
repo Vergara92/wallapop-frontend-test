@@ -1,3 +1,5 @@
+import Item from '@/domain/models/Item'
+
 const exampleItemList = [
   {
     title: 'iPhone 6S Oro',
@@ -14,5 +16,7 @@ const exampleItemList = [
     image: 'https://frontend-tech-test-data.s3-eu-west-1.amazonaws.com/img/camera.png'
   }
 ]
+const exampleModeledItemList = exampleItemList.map((item, index) => new Item(item, index))
 
+export { exampleModeledItemList }
 export default exampleItemList

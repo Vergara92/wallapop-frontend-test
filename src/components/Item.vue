@@ -10,7 +10,7 @@
     />
     <div class="item--text">
       <div
-        @click="$emit('switch-favourite')"
+        @click="$emit('switch-favourite', item.id)"
         class="fav--container"
         data-testid="favourite-trigger"
       >

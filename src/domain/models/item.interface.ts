@@ -1,7 +1,9 @@
 export default interface Item {
-  title: string,
-  description: string,
-  price: string,
-  email: string,
+  id?: number
+  title: string
+  description: string
+  price: string
+  email: string
   image: string
+  isFavourite?: boolean
 }
