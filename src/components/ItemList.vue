@@ -2,7 +2,7 @@
   <section class="item-list--container">
     <ul class="item-list">
       <Item
-        v-for="(item, index) in itemList"
+        v-for="(item, index) in filteredItemList"
         :item="item"
         :key="index"
         @switch-favourite="changeFavouriteStatus"
@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts">
-import item from '@/domain/models/item.interface'
 import Item from '@/components/Item.vue'
 import Vue from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'ItemList',
@@ -24,11 +23,8 @@ export default Vue.extend({
     Item
   },
 
-  props: {
-    itemList: {
-      required: true,
-      type: Array as () => item[]
-    }
+  computed: {
+    ...mapGetters(['filteredItemList'])
   },
 
   methods: {
@@ -50,8 +46,7 @@ export default Vue.extend({
   margin: 0 -5px;
 
   @media (min-width: 1020px) {
-    max-width: 1400px;
-    margin: 0 auto;
+    margin: 0;
   }
 }
 </style>

@@ -2,12 +2,30 @@ import Item from '@/domain/models/Item'
 import itemService from '@/domain/services/itemService'
 
 import Vue from 'vue'
-import Vuex, { ActionTree, MutationTree } from 'vuex'
+import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex'
 
 Vue.use(Vuex)
 
 export class State {
   itemList: Item[] | null = null
+  filterText = ''
+}
+
+export const getters: GetterTree<State, State> = {
+  filteredItemList (state): Item[] | [] {
+    if (state.itemList === null) return []
+
+    if (state.filterText === '') {
+      return state.itemList
+    }
+
+    const filteredList = state.itemList.filter((item: Item) => {
+      const finded = itemService.hasFilterText(item, state.filterText)
+
+      return finded
+    })
+    return filteredList
+  }
 }
 
 export const mutations = <MutationTree<State>>{
@@ -24,6 +42,9 @@ export const mutations = <MutationTree<State>>{
     const currentStatus = state.itemList[itemId].isFavourite
 
     state.itemList[itemId].isFavourite = !currentStatus
+  },
+  SET_FILTER_TEXT (state, filterText: string) {
+    state.filterText = filterText.toLowerCase()
   }
 
 }
@@ -36,11 +57,15 @@ export const actions = <ActionTree<State, State>>{
   },
   triggerFavouriteChange ({ commit }, itemId: number) {
     commit('SWITCH_FAVOURITE_STATUS', itemId)
+  },
+  setFilterValue ({ commit }, filterValue: string) {
+    commit('SET_FILTER_TEXT', filterValue)
   }
 }
 
 export default new Vuex.Store({
   state: new State(),
   mutations,
+  getters,
   actions
 })

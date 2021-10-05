@@ -7,7 +7,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('App Component', () => {
-  let actions: { fetchItemList: jest.Mock }
+  let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock }
   let store: Store<State>
   const renderWrapper = (store: Store<State>) => {
     return shallowMount(App, { store, localVue })
@@ -15,7 +15,8 @@ describe('App Component', () => {
 
   beforeEach(() => {
     actions = {
-      fetchItemList: jest.fn()
+      fetchItemList: jest.fn(),
+      setFilterValue: jest.fn()
     }
 
     store = new Vuex.Store({
@@ -33,5 +34,13 @@ describe('App Component', () => {
     renderWrapper(store)
 
     expect(actions.fetchItemList).toBeCalledTimes(1)
+  })
+  it('dispatches setFilterValue when search-input emit event', () => {
+    const wrapper = renderWrapper(store)
+    const searchInput = wrapper.findComponent({ name: 'SearchInput' })
+
+    searchInput.vm.$emit('change-filter-value', 'iPhone')
+
+    expect(actions.setFilterValue).toBeCalledWith(expect.any(Object), 'iPhone')
   })
 })

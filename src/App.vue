@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    <item-list
-      v-if="itemList"
-      :item-list="itemList"
-    />
+    <div class="container">
+      <search-input
+        @change-filter-value="changeFilterValue"
+      />
+      <item-list
+        v-if="itemList"
+      />
+    </div>
   </div>
 </template>
 
@@ -11,12 +15,14 @@
 import Vue from 'vue'
 import { mapActions, mapState } from 'vuex'
 import ItemList from '@/components/ItemList.vue'
+import SearchInput from './components/SearchInput.vue'
 
 export default Vue.extend({
   name: 'App',
 
   components: {
-    ItemList
+    ItemList,
+    SearchInput
   },
 
   computed: {
@@ -24,7 +30,10 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions(['fetchItemList'])
+    ...mapActions(['fetchItemList', 'setFilterValue']),
+    changeFilterValue (filterValue: string) {
+      this.setFilterValue(filterValue)
+    }
   },
 
   created () {
@@ -38,6 +47,7 @@ export default Vue.extend({
   --text-color: #2c3e50;
   --grey-color: #f7f7f7;
   --main-color: #13C1AC;
+  --placeholder-color: #a6a6a6;
   --border-radius-size: 8px;
 }
 
@@ -52,4 +62,14 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (min-width: 1020px) {
+    padding: 0 20px;
+  }
+}
+
 </style>
