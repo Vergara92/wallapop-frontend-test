@@ -1,20 +1,21 @@
 <template>
   <section class="item-list--container">
-    <ul class="item-list">
+    <transition-group name="list" tag="ul" class="item-list">
       <Item
-        v-for="(item, index) in filteredItemList"
+        v-for="(item) in itemList"
         :item="item"
-        :key="index"
+        :key="item.id"
         @switch-favourite="changeFavouriteStatus"
       />
-    </ul>
+    </transition-group>
   </section>
 </template>
 
 <script lang="ts">
 import Item from '@/components/Item.vue'
+import Iitem from '@/domain/models/item.interface'
 import Vue from 'vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default Vue.extend({
   name: 'ItemList',
@@ -23,8 +24,11 @@ export default Vue.extend({
     Item
   },
 
-  computed: {
-    ...mapGetters(['filteredItemList'])
+  props: {
+    itemList: {
+      required: true,
+      type: Array as () => Iitem[]
+    }
   },
 
   methods: {
@@ -48,5 +52,13 @@ export default Vue.extend({
   @media (min-width: 1020px) {
     margin: 0;
   }
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all .6s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

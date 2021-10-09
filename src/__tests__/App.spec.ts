@@ -10,7 +10,7 @@ describe('App Component', () => {
   let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock }
   let store: Store<State>
   const renderWrapper = (store: Store<State>) => {
-    return shallowMount(App, { store, localVue })
+    return shallowMount<App>(App, { store, localVue })
   }
 
   beforeEach(() => {
@@ -42,5 +42,13 @@ describe('App Component', () => {
     searchInput.vm.$emit('change-filter-value', 'iPhone')
 
     expect(actions.setFilterValue).toBeCalledWith(expect.any(Object), 'iPhone')
+  })
+  it('changes showFavouriteModal when topBar emit see-favourite-modal event', async () => {
+    const wrapper = renderWrapper(store)
+    const TopBarComponent = wrapper.findComponent({ name: 'TopBar' })
+
+    await TopBarComponent.vm.$emit('see-favourite-modal')
+
+    expect(wrapper.vm.showFavouriteModal).toBe(true)
   })
 })

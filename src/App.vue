@@ -1,11 +1,14 @@
 <template>
   <div id="app">
+    <top-bar @see-favourite-modal="showFavouriteModal = true"/>
+
     <div class="container">
       <search-input
         @change-filter-value="changeFilterValue"
       />
       <item-list
         v-if="itemList"
+        :item-list="filteredItemList"
       />
     </div>
   </div>
@@ -13,22 +16,30 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import ItemList from '@/components/ItemList.vue'
-import SearchInput from './components/SearchInput.vue'
+import SearchInput from '@/components/SearchInput.vue'
+import TopBar from '@/components/TopBar.vue'
 
 export default Vue.extend({
   name: 'App',
 
   components: {
     ItemList,
-    SearchInput
+    SearchInput,
+    TopBar
+  },
+
+  data () {
+    return {
+      showFavouriteModal: false
+    }
   },
 
   computed: {
-    ...mapState(['itemList'])
+    ...mapState(['itemList']),
+    ...mapGetters(['filteredItemList'])
   },
-
   methods: {
     ...mapActions(['fetchItemList', 'setFilterValue']),
     changeFilterValue (filterValue: string) {
@@ -56,7 +67,7 @@ html {
 }
 
 #app {
-  margin-top: 60px;
+  margin-top: 80px;
   color: var(--text-color);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
