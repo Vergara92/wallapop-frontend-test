@@ -10,7 +10,15 @@ describe('App Component', () => {
   let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock }
   let store: Store<State>
   const renderWrapper = (store: Store<State>) => {
-    return shallowMount<App>(App, { store, localVue })
+    return shallowMount<typeof App & Vue>(App, {
+      store,
+      localVue,
+      data () {
+        return {
+          showFavouriteModal: false
+        }
+      }
+    })
   }
 
   beforeEach(() => {
@@ -49,6 +57,10 @@ describe('App Component', () => {
 
     await TopBarComponent.vm.$emit('see-favourite-modal')
 
-    expect(wrapper.vm.showFavouriteModal).toBe(true)
+    // @Vergara92 TODO: This workaround is actually because Vue Typing properties are private
+    // and you need to specify it if you want to access a property
+    // Here is the issue for future references: https://github.com/vuejs/vue-test-utils-next/issues/972
+
+    expect((wrapper.vm as unknown as { showFavouriteModal: boolean }).showFavouriteModal).toBe(true)
   })
 })
