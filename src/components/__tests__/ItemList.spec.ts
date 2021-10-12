@@ -21,7 +21,8 @@ describe('ItemList Component', () => {
     }
     state = {
       itemList: exampleModeledItemList,
-      filterText: ''
+      filterText: '',
+      favouriteFilterText: ''
     }
 
     store = new Vuex.Store({

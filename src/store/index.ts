@@ -1,6 +1,6 @@
 import Item from '@/domain/models/Item'
 import itemService from '@/domain/services/itemService'
-
+import setFilterInterface from '@/store/setFilter.interface'
 import Vue from 'vue'
 import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex'
 
@@ -9,22 +9,20 @@ Vue.use(Vuex)
 export class State {
   itemList: Item[] | null = null
   filterText = ''
+  favouriteFilterText = ''
 }
 
 export const getters: GetterTree<State, State> = {
   filteredItemList (state): Item[] | [] {
+    return filterListItems(state.itemList, state.filterText)
+  },
+  favouriteItemList (state): Item[] | [] {
     if (state.itemList === null) return []
 
-    if (state.filterText === '') {
-      return state.itemList
-    }
-
-    const filteredList = state.itemList.filter((item: Item) => {
-      const finded = itemService.hasFilterText(item, state.filterText)
-
-      return finded
-    })
-    return filteredList
+    return state.itemList.filter((item: Item) => item.isFavourite)
+  },
+  filteredFavouriteItemList (state, getters): Item[] | [] {
+    return filterListItems(getters.favouriteItemList, state.favouriteFilterText)
   }
 }
 
@@ -43,8 +41,15 @@ export const mutations = <MutationTree<State>>{
 
     state.itemList[itemId].isFavourite = !currentStatus
   },
-  SET_FILTER_TEXT (state, filterText: string) {
-    state.filterText = filterText.toLowerCase()
+  SET_FILTER_TEXT (state, payload: setFilterInterface) {
+    const { filterValue, isFavourite } = payload
+    if (isFavourite === false) {
+      state.filterText = filterValue.toLowerCase()
+
+      return
+    }
+
+    state.favouriteFilterText = filterValue.toLowerCase()
   }
 
 }
@@ -58,9 +63,24 @@ export const actions = <ActionTree<State, State>>{
   triggerFavouriteChange ({ commit }, itemId: number) {
     commit('SWITCH_FAVOURITE_STATUS', itemId)
   },
-  setFilterValue ({ commit }, filterValue: string) {
-    commit('SET_FILTER_TEXT', filterValue)
+  setFilterValue ({ commit }, payload: setFilterInterface) {
+    commit('SET_FILTER_TEXT', payload)
   }
+}
+
+function filterListItems (itemList: Item[] | null, textToFilter: string): Item[] | [] {
+  if (itemList === null) return []
+
+  if (textToFilter === '') {
+    return itemList
+  }
+
+  const filteredList = itemList.filter((item: Item) => {
+    const finded = itemService.hasFilterText(item, textToFilter)
+
+    return finded
+  })
+  return filteredList
 }
 
 export default new Vuex.Store({

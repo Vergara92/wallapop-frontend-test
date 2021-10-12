@@ -11,6 +11,14 @@
         :item-list="filteredItemList"
       />
     </div>
+    <transition name="modal--transition">
+      <favourite-modal
+        v-show="showFavouriteModal"
+        :item-list="filteredFavouriteItemList"
+        @close-favourite-modal="showFavouriteModal = false"
+        @change-filter-value="changeFilterValue($event, true)"
+      />
+    </transition>
   </div>
 </template>
 
@@ -20,14 +28,16 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import ItemList from '@/components/ItemList.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import TopBar from '@/components/TopBar.vue'
+import FavouriteModal from '@/components/FavouriteModal.vue'
 
 export default Vue.extend({
   name: 'App',
 
   components: {
+    TopBar,
     ItemList,
     SearchInput,
-    TopBar
+    FavouriteModal
   },
 
   data () {
@@ -38,12 +48,25 @@ export default Vue.extend({
 
   computed: {
     ...mapState(['itemList']),
-    ...mapGetters(['filteredItemList'])
+    ...mapGetters(['filteredItemList', 'filteredFavouriteItemList'])
   },
+
+  watch: {
+    showFavouriteModal (value) {
+      if (value === true) {
+        document.body.classList.add('is-fixed')
+
+        return
+      }
+
+      document.body.classList.remove('is-fixed')
+    }
+  },
+
   methods: {
     ...mapActions(['fetchItemList', 'setFilterValue']),
-    changeFilterValue (filterValue: string) {
-      this.setFilterValue(filterValue)
+    changeFilterValue (filterValue: string, isFavourite = false) {
+      this.setFilterValue({ filterValue, isFavourite })
     }
   },
 
@@ -66,6 +89,10 @@ html {
     background-color: var(--grey-color);
 }
 
+body.is-fixed {
+  overflow: hidden;
+}
+
 #app {
   margin-top: 80px;
   color: var(--text-color);
@@ -81,6 +108,13 @@ html {
   @media (min-width: 1020px) {
     padding: 0 20px;
   }
+}
+
+.modal--transition-enter-active, .modal--transition-leave-active {
+  transition: all .6s;
+}
+.modal--transition-enter, .modal--transition-leave-to {
+  opacity: 0;
 }
 
 </style>

@@ -44,11 +44,6 @@ export default Vue.extend({
       required: true,
       type: Object as () => item
     }
-  },
-  filters: {
-    truncate: function (text: string):string | null {
-      return text.length > 90 ? text.slice(0, 90) + '...' : text
-    }
   }
 })
 </script>
@@ -63,7 +58,6 @@ export default Vue.extend({
   background-color: white;
   border-radius: var(--border-radius-size);
   cursor: default;
-  overflow: hidden;
   transition: box-shadow .6s ease;
 
   @media (min-width: 600px) {
@@ -77,8 +71,45 @@ export default Vue.extend({
     padding-bottom: 0;
   }
 
+  .favourite-modal & {
+    position: relative;
+  }
+
+  &:last-child {
+    .favourite-modal & {
+      &::before {
+        content: none;
+      }
+    }
+  }
+
   &:hover {
     box-shadow: 0 8px 16px 0 color-mod(#000 alpha(20%));
+
+    .favourite-modal & {
+      box-shadow: none;
+    }
+  }
+
+  &::before {
+    .favourite-modal & {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+      left: 0;
+      height: 1px;
+      background-color: color-mod(#000 alpha(50%));
+
+      @media (min-width: 600px) {
+        display: none;
+      }
+
+      @media (min-width: 1020px) {
+        display: block;
+        bottom: -10px;
+      }
+    }
   }
 }
 
@@ -108,6 +139,18 @@ export default Vue.extend({
     padding: 0 20px 15px 20px;
     flex-flow: row wrap;
     flex: 1 1 auto;
+  }
+
+  .favourite-modal & {
+    @media (min-width: 600px) {
+      border: 1px solid color-mod(#000 alpha(50%));
+      border-top: 0;
+      border-radius: 0 0 var(--border-radius-size) var(--border-radius-size);
+    }
+
+    @media (min-width: 1020px) {
+      border: 0;
+    }
   }
 }
 
@@ -154,6 +197,10 @@ export default Vue.extend({
   @media (min-width: 1200px) {
     max-width: 1000px;
   }
+
+  .favourite-modal & {
+    display: none;
+  }
 }
 
 .item--bottom {
@@ -161,6 +208,10 @@ export default Vue.extend({
   width: 100%;
   margin-top: auto;
   padding-top: 10px;
+
+  .favourite-modal & {
+    display: none;
+  }
 }
 
 .item--price {

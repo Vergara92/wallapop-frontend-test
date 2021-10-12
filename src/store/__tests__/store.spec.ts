@@ -2,6 +2,7 @@ import exampleItemList, { exampleModeledItemList } from '@/api/__mocks__/example
 import Item from '@/domain/models/Item'
 import itemService from '@/domain/services/itemService'
 import { State, getters, mutations, actions } from '@/store/index'
+import setFilterInterface from '@/store/setFilter.interface'
 import { ActionContext, Commit } from 'vuex'
 
 let state: State
@@ -14,7 +15,8 @@ describe('Store', () => {
     it('filter Item when filterText is changed', () => {
       state = {
         itemList: exampleModeledItemList,
-        filterText: 'hone'
+        filterText: 'hone',
+        favouriteFilterText: ''
       }
       const rootState = state
       const rootGetters = getters
@@ -42,10 +44,15 @@ describe('Store', () => {
       expect(state.itemList[exampleId].isFavourite).toBeTruthy()
     })
 
-    it('Sets given text in filterText in lowerCase', () => {
-      mutations.SET_FILTER_TEXT(state, 'Polaroid')
+    it('Sets given text in filterText in lowerCase if isFavourite is false', () => {
+      mutations.SET_FILTER_TEXT(state, { filterValue: 'Polaroid', isFavourite: false })
 
       expect(state.filterText).toBe('polaroid')
+    })
+    it('Sets given text in favouriteFilterText in lowerCase if isFavourite is true', () => {
+      mutations.SET_FILTER_TEXT(state, { filterValue: 'iPhone', isFavourite: true })
+
+      expect(state.favouriteFilterText).toBe('iphone')
     })
   })
   describe('Store actions', () => {
@@ -94,12 +101,13 @@ describe('Store', () => {
         rootState: state,
         rootGetters: {}
       }
+      const setFilterPayload = { filterValue: 'Bolso', isFavourite: false }
 
-      const setFilterValue = actions.setFilterValue as (ctx: typeof actionContext, filterValue: string) => Commit
+      const setFilterValue = actions.setFilterValue as (ctx: typeof actionContext, payload: setFilterInterface) => Commit
 
-      setFilterValue(actionContext, 'Bolso')
+      setFilterValue(actionContext, setFilterPayload)
 
-      expect(actionContext.commit).toBeCalledWith('SET_FILTER_TEXT', 'Bolso')
+      expect(actionContext.commit).toBeCalledWith('SET_FILTER_TEXT', setFilterPayload)
     })
   })
 })
