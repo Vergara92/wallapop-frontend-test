@@ -23,7 +23,8 @@ describe('ItemList Component', () => {
       itemList: exampleModeledItemList,
       filterText: '',
       favouriteFilterText: '',
-      currentPage: 1
+      currentPage: 1,
+      sortingKey: false
     }
 
     store = new Vuex.Store({

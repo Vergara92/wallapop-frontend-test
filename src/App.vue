@@ -3,9 +3,12 @@
     <top-bar @see-favourite-modal="showFavouriteModal = true"/>
 
     <div class="container">
-      <search-input
-        @change-filter-value="changeFilterValue"
-      />
+      <div class="container-top">
+        <search-input
+          @change-filter-value="changeFilterValue"
+        />
+        <sort-select @change-order-sorting="changeOrderSorting"/>
+      </div>
 
       <item-list
         v-if="itemList"
@@ -34,9 +37,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import ItemList from '@/components/ItemList.vue'
-import SearchInput from '@/components/SearchInput.vue'
 import TopBar from '@/components/TopBar.vue'
+import SearchInput from '@/components/SearchInput.vue'
+import SortSelect from '@/components/SortSelect.vue'
+import ItemList from '@/components/ItemList.vue'
 import PaginationList from '@/components/PaginationList.vue'
 import FavouriteModal from '@/components/FavouriteModal.vue'
 
@@ -45,8 +49,9 @@ export default Vue.extend({
 
   components: {
     TopBar,
-    ItemList,
     SearchInput,
+    SortSelect,
+    ItemList,
     FavouriteModal,
     PaginationList
   },
@@ -75,7 +80,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions(['fetchItemList', 'setFilterValue', 'setCurrentPage']),
+    ...mapActions(['fetchItemList', 'setFilterValue', 'setCurrentPage', 'setSortingOrder']),
     changeFilterValue (filterValue: string, isFavourite = false) {
       this.setFilterValue({ filterValue, isFavourite })
     },
@@ -86,6 +91,10 @@ export default Vue.extend({
         behavior: 'smooth'
       })
       this.setCurrentPage(newCurrentPage)
+    },
+
+    changeOrderSorting (orderKey: string) {
+      this.setSortingOrder(orderKey)
     }
   },
 

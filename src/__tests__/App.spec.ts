@@ -8,7 +8,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('App Component', () => {
-  let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock, setCurrentPage: jest.Mock }
+  let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock, setCurrentPage: jest.Mock, setSortingOrder: jest.Mock }
   let state: State
   let store: Store<State>
   const renderWrapper = (store: Store<State>) => {
@@ -28,7 +28,8 @@ describe('App Component', () => {
     actions = {
       fetchItemList: jest.fn(),
       setFilterValue: jest.fn(),
-      setCurrentPage: jest.fn()
+      setCurrentPage: jest.fn(),
+      setSortingOrder: jest.fn()
     }
 
     store = new Vuex.Store({
@@ -108,5 +109,13 @@ describe('App Component', () => {
     await paginationComponent.vm.$emit('change-page', 4)
 
     expect(scrollSpy).toBeCalledWith({ behavior: 'smooth', top: 0 })
+  })
+  it('triggers setSortingOrder when SortSelect component emit event', async () => {
+    const wrapper = renderWrapper(store)
+    const SortSelectComponent = wrapper.findComponent({ name: 'SortSelect' })
+
+    SortSelectComponent.vm.$emit('change-order-sorting', 'price')
+
+    expect(actions.setSortingOrder).toBeCalledWith(expect.any(Object), 'price')
   })
 })

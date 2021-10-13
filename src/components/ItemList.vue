@@ -42,6 +42,9 @@ export default Vue.extend({
 </script>
 
 <style lang="postcss" scoped>
+.item-list--container {
+  position: relative;
+}
 .item-list {
   display: flex;
   flex-wrap: wrap;
@@ -54,8 +57,11 @@ export default Vue.extend({
   }
 }
 
-.list-enter-active, .list-leave-active {
+.list-enter-active {
   transition: all .6s;
+}
+.list-leave-active {
+  display: none;
 }
 .list-enter, .list-leave-to {
   opacity: 0;

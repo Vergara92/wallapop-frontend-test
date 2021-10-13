@@ -23,12 +23,9 @@ describe('Store', () => {
 
   describe('Store getters', () => {
     it('filter Item when filterText is changed', () => {
-      state = {
-        itemList: exampleModeledItemList,
-        filterText: 'hone',
-        favouriteFilterText: '',
-        currentPage: 1
-      }
+      state.itemList = exampleModeledItemList
+      state.filterText = 'hone'
+
       const rootState = state
       const rootGetters = getters
 
@@ -36,16 +33,53 @@ describe('Store', () => {
 
       expect(filteredList.length).toBe(2)
     })
-
-    it('show only 5 items in paginatedItems', () => {
-      state = {
-        itemList: exampleModeledItemList,
-        filterText: '',
-        favouriteFilterText: '',
-        currentPage: 1
-      }
+    it('doesnt order items when sortingKey is false', () => {
+      state.itemList = exampleModeledItemList
+      state.sortingKey = false
       const mockedGetters = {
         filteredItemList: exampleModeledItemList
+      }
+
+      const rootState = state
+      const rootGetters = getters
+
+      const sortedItems = getters.sortedItems(state, mockedGetters, rootState, rootGetters)
+
+      expect(sortedItems[0].title).toBe('iPhone 6S Oro')
+    })
+    it('order items by ascending title when that sortingKey is selected', () => {
+      state.itemList = exampleModeledItemList
+      state.sortingKey = 'title'
+      const mockedGetters = {
+        filteredItemList: exampleModeledItemList
+      }
+
+      const rootState = state
+      const rootGetters = getters
+
+      const sortedItems = getters.sortedItems(state, mockedGetters, rootState, rootGetters)
+
+      expect(sortedItems[0].title).toBe('Barbacoa')
+    })
+    it('order items by ascending price when price sortingKey is selected', () => {
+      state.itemList = exampleModeledItemList
+      state.sortingKey = 'price'
+      const mockedGetters = {
+        filteredItemList: exampleModeledItemList
+      }
+
+      const rootState = state
+      const rootGetters = getters
+
+      const sortedItems = getters.sortedItems(state, mockedGetters, rootState, rootGetters)
+
+      expect(sortedItems[0].title).toBe('Clases de piano')
+    })
+
+    it('show only 5 items in paginatedItems', () => {
+      state.itemList = exampleModeledItemList
+      const mockedGetters = {
+        sortedItems: exampleModeledItemList
       }
       const rootState = state
       const rootGetters = mockedGetters
@@ -55,22 +89,18 @@ describe('Store', () => {
       expect(paginatedItems.length).toBe(5)
     })
 
-    it('show iteems related with the currentPage', () => {
-      state = {
-        itemList: exampleModeledItemList,
-        filterText: '',
-        favouriteFilterText: '',
-        currentPage: 3
-      }
+    it('show items related with the currentPage', () => {
+      state.itemList = exampleModeledItemList
+      state.currentPage = 3
       const mockedGetters = {
-        filteredItemList: exampleModeledItemList
+        sortedItems: exampleModeledItemList
       }
       const rootState = state
       const rootGetters = mockedGetters
 
       const paginatedItems = getters.paginatedItems(state, mockedGetters, rootState, rootGetters)
 
-      expect(paginatedItems[0]).toBe(mockedGetters.filteredItemList[10])
+      expect(paginatedItems[0]).toBe(mockedGetters.sortedItems[10])
     })
   })
 
@@ -107,6 +137,11 @@ describe('Store', () => {
       mutations.SET_CURRENT_PAGE(state, 3)
 
       expect(state.currentPage).toBe(3)
+    })
+    it('Sets sortingOrder with SET_SORTING_ORDER mutation', () => {
+      mutations.SET_SORTING_ORDER(state, 'email')
+
+      expect(state.sortingKey).toBe('email')
     })
   })
   describe('Store actions', () => {
@@ -148,11 +183,18 @@ describe('Store', () => {
     })
 
     it('trigger SET_CURRENT_PAGE on setCurrentPage call', () => {
-      const setFilterValue = actions.setCurrentPage as (ctx: typeof actionContext, currentPage: number) => Commit
+      const setCurrentPage = actions.setCurrentPage as (ctx: typeof actionContext, currentPage: number) => Commit
 
-      setFilterValue(actionContext, 10)
+      setCurrentPage(actionContext, 10)
 
       expect(actionContext.commit).toBeCalledWith('SET_CURRENT_PAGE', 10)
+    })
+    it('trigger SET_SORTING_ORDER on setSortingOrder call', () => {
+      const setSortingOrder = actions.setSortingOrder as (ctx: typeof actionContext, sortingKey: string) => Commit
+
+      setSortingOrder(actionContext, 'price')
+
+      expect(actionContext.commit).toBeCalledWith('SET_SORTING_ORDER', 'price')
     })
   })
 })
