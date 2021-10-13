@@ -17,14 +17,14 @@ beforeEach(() => {
 
 describe('ItemList Component', () => {
   it('emit change favourite event with id number when heart is clicked', async () => {
-    const heartIcon = wrapper.find('[data-testid="favourite-trigger"]')
+    const heartIcon = wrapper.find('[data-test-id="favourite-trigger"]')
 
     await heartIcon.trigger('click')
 
     expect(wrapper.emitted('switch-favourite')).toEqual([[3]])
   })
   it('has mailto email as email anchor', async () => {
-    const emailDOMElement = wrapper.find('[data-testid="email-anchor"]')
+    const emailDOMElement = wrapper.find('[data-test-id="email-anchor"]')
     const expectedHref = `mailto:${exampleItemList[0].email}`
 
     expect(emailDOMElement.attributes('href')).toBe(expectedHref)

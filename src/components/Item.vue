@@ -1,6 +1,7 @@
 <template>
   <li
     class="item--container"
+    data-test-id="item-general"
   >
     <div
       :style="{ backgroundImage: `url(${item.image})` }"
@@ -12,7 +13,7 @@
       <div
         @click="$emit('switch-favourite', item.id)"
         class="fav--container"
-        data-testid="favourite-trigger"
+        data-test-id="favourite-trigger"
       >
         <div class="fav--image" :class="{ 'is-active': item.isFavourite }"/>
       </div>
@@ -23,7 +24,7 @@
         <a
           class="item--email"
           :href="`mailto:${item.email}`"
-          data-testid="email-anchor"
+          data-test-id="email-anchor"
         >
           {{ item.email }}
         </a>

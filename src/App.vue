@@ -5,12 +5,14 @@
     <div class="container">
       <div class="container-top">
         <search-input
+          data-test-id="search-input-general"
           @change-filter-value="changeFilterValue"
         />
         <sort-select @change-order-sorting="changeOrderSorting"/>
       </div>
 
       <item-list
+        data-test-id="item-list-general"
         v-if="itemList"
         :item-list="paginatedItems"
       />

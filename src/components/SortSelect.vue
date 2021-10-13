@@ -1,12 +1,12 @@
 <template>
   <div class="sort-select--container">
-    <select class="sort-select">
+    <select class="sort-select" data-test-id="sort-select">
       <option
         v-for="filterOption in filterOptions"
         :key="filterOption.value"
         :value="filterOption.value"
         @click="$emit('change-order-sorting', filterOption.value)"
-        data-testid="sort-select-option"
+        data-test-id="sort-select-option"
       >
         {{ filterOption.title }}
       </option>

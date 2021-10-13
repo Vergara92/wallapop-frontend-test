@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe('TopBar Component', () => {
   it('Emit open-favourite-modal when see favourite button is cliccked', async () => {
-    const seeFavButton = wrapper.find('[data-testid="see-favourite-button"]')
+    const seeFavButton = wrapper.find('[data-test-id="see-favourite-button"]')
 
     await seeFavButton.trigger('click')
 

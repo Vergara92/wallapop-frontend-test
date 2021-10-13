@@ -5,7 +5,7 @@
         <i class="top-bar--logo" />
         <button
           class="top-bar--button"
-          data-testid="see-favourite-button"
+          data-test-id="see-favourite-button"
           @click="$emit('see-favourite-modal')"
         >
         Ver Favoritos
