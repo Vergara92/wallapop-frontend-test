@@ -6,11 +6,20 @@
       <search-input
         @change-filter-value="changeFilterValue"
       />
+
       <item-list
         v-if="itemList"
-        :item-list="filteredItemList"
+        :item-list="paginatedItems"
+      />
+
+      <pagination-list
+        v-if="itemList"
+        :itemsQuantity="filteredItemList.length"
+        :activePage="currentPage"
+        @change-page="changeCurrentPage"
       />
     </div>
+
     <transition name="modal--transition">
       <favourite-modal
         v-show="showFavouriteModal"
@@ -28,6 +37,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import ItemList from '@/components/ItemList.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import TopBar from '@/components/TopBar.vue'
+import PaginationList from '@/components/PaginationList.vue'
 import FavouriteModal from '@/components/FavouriteModal.vue'
 
 export default Vue.extend({
@@ -37,7 +47,8 @@ export default Vue.extend({
     TopBar,
     ItemList,
     SearchInput,
-    FavouriteModal
+    FavouriteModal,
+    PaginationList
   },
 
   data () {
@@ -47,8 +58,8 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['itemList']),
-    ...mapGetters(['filteredItemList', 'filteredFavouriteItemList'])
+    ...mapState(['itemList', 'currentPage']),
+    ...mapGetters(['paginatedItems', 'filteredItemList', 'filteredFavouriteItemList'])
   },
 
   watch: {
@@ -64,9 +75,17 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions(['fetchItemList', 'setFilterValue']),
+    ...mapActions(['fetchItemList', 'setFilterValue', 'setCurrentPage']),
     changeFilterValue (filterValue: string, isFavourite = false) {
       this.setFilterValue({ filterValue, isFavourite })
+    },
+
+    changeCurrentPage (newCurrentPage: number) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+      this.setCurrentPage(newCurrentPage)
     }
   },
 
@@ -111,7 +130,7 @@ body.is-fixed {
 }
 
 .modal--transition-enter-active, .modal--transition-leave-active {
-  transition: all .6s;
+  transition: all .6s ease;
 }
 .modal--transition-enter, .modal--transition-leave-to {
   opacity: 0;

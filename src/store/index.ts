@@ -10,19 +10,35 @@ export class State {
   itemList: Item[] | null = null
   filterText = ''
   favouriteFilterText = ''
+  currentPage = 1
 }
 
 export const getters: GetterTree<State, State> = {
   filteredItemList (state): Item[] | [] {
     return filterListItems(state.itemList, state.filterText)
   },
+
   favouriteItemList (state): Item[] | [] {
     if (state.itemList === null) return []
 
     return state.itemList.filter((item: Item) => item.isFavourite)
   },
+
   filteredFavouriteItemList (state, getters): Item[] | [] {
     return filterListItems(getters.favouriteItemList, state.favouriteFilterText)
+  },
+
+  paginatedItems (state, getters): Item[] | [] {
+    const currentPage = state.currentPage
+    const firstItemIndex = currentPage * 5 - 5
+    const lastItemIndex = currentPage * 5 - 1
+
+    return getters.filteredItemList.filter((item: Item, index: number) => {
+      if (index >= firstItemIndex && index <= lastItemIndex) {
+        return true
+      }
+      return false
+    })
   }
 }
 
@@ -50,6 +66,9 @@ export const mutations = <MutationTree<State>>{
     }
 
     state.favouriteFilterText = filterValue.toLowerCase()
+  },
+  SET_CURRENT_PAGE (state, currentPage: number) {
+    state.currentPage = currentPage
   }
 
 }
@@ -65,6 +84,11 @@ export const actions = <ActionTree<State, State>>{
   },
   setFilterValue ({ commit }, payload: setFilterInterface) {
     commit('SET_FILTER_TEXT', payload)
+
+    if (payload.isFavourite === false) commit('SET_CURRENT_PAGE', 1)
+  },
+  setCurrentPage ({ commit }, currentPage: number) {
+    commit('SET_CURRENT_PAGE', currentPage)
   }
 }
 

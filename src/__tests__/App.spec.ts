@@ -1,13 +1,14 @@
 import App from '@/App.vue'
+import { State, getters } from '@/store'
+import { exampleModeledItemList } from '@/api/__mocks__/exampleItemList'
 import Vuex, { Store } from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import { State, getters } from '@/store'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('App Component', () => {
-  let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock }
+  let actions: { fetchItemList: jest.Mock, setFilterValue: jest.Mock, setCurrentPage: jest.Mock }
   let state: State
   let store: Store<State>
   const renderWrapper = (store: Store<State>) => {
@@ -26,7 +27,8 @@ describe('App Component', () => {
     state = new State()
     actions = {
       fetchItemList: jest.fn(),
-      setFilterValue: jest.fn()
+      setFilterValue: jest.fn(),
+      setCurrentPage: jest.fn()
     }
 
     store = new Vuex.Store({
@@ -85,5 +87,26 @@ describe('App Component', () => {
     await FavouriteModalComponent.vm.$emit('close-favourite-modal')
 
     expect((wrapper.vm as unknown as { showFavouriteModal: boolean }).showFavouriteModal).toBe(false)
+  })
+  it('triggers setCurrentPage when pagination-list emit change-page', async () => {
+    window.scrollTo = jest.fn()
+    store.state.itemList = exampleModeledItemList
+    const wrapper = renderWrapper(store)
+    const paginationComponent = wrapper.findComponent({ name: 'PaginationList' })
+
+    await paginationComponent.vm.$emit('change-page', 4)
+
+    expect(actions.setCurrentPage).toBeCalledWith(expect.any(Object), 4)
+  })
+  it('scroll to the top when pagination-list emit change-page', async () => {
+    const scrollSpy = jest.fn()
+    window.scrollTo = scrollSpy
+    store.state.itemList = exampleModeledItemList
+    const wrapper = renderWrapper(store)
+    const paginationComponent = wrapper.findComponent({ name: 'PaginationList' })
+
+    await paginationComponent.vm.$emit('change-page', 4)
+
+    expect(scrollSpy).toBeCalledWith({ behavior: 'smooth', top: 0 })
   })
 })
