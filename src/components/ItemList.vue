@@ -62,6 +62,11 @@ export default Vue.extend({
 }
 .list-leave-active {
   display: none;
+
+  .favourite-modal & {
+    display: flex;
+    transition: all .6s;
+  }
 }
 .list-enter, .list-leave-to {
   opacity: 0;

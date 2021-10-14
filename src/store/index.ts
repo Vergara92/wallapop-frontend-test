@@ -77,7 +77,6 @@ export const mutations = <MutationTree<State>>{
     if (state.itemList === null) return
     const currentStatus = state.itemList[itemId].isFavourite
 
-    console.log(itemId, state.itemList[itemId])
     state.itemList[itemId].isFavourite = !currentStatus
   },
 
